@@ -1,4 +1,10 @@
 var button = document.getElementById("myBtn");
+var powerData;
+var viewSize = 30;
+function currentStart(end, size) { 
+    return end - size;
+}
+
 var requestURL = "data/power_consumption.json";
 var request = new XMLHttpRequest();
 request.open('GET', requestURL);
@@ -7,45 +13,55 @@ request.send();
 request.addEventListener("load", transferComplete);
 
 function transferComplete(e){
-    drawGraphs(request.response, 10, 18);
+    powerData = getPowerData(request.response);
+    var start = currentStart(powerData[0].length, viewSize);
+    getView(powerData, viewSize, start);
 }
-var cat;
 button.addEventListener("click", function(e) {
-    cat = drawGraphs(request.response, 0, 8);
-    console.log(cat);
+    //getView(powerData, 8, powerData[0].length - 8);
 });
 
-function drawGraphs(response, begin, end) {
+function getPowerData(response) {
     var data = response;
     var dates = [];
     var obs = [];
-    var obsSD = [];
     var fore = [];
     var sub1 = [];
-    var sub1SD = [];
     var sub2 = [];
-    var sub2SD = [];
     var sub3 = [];
-    var sub3SD = [];
     var volt = [];
-    for (var i = begin; i < end; i++) {
+    for (var i = 0; i < data.length; i++) {
         var day = JSON.parse(data[i]);
         dates.push(day.Date);
         obs.push(day.glb_act_pwr_mean);
-        obsSD.push(day.glb_act_pwr_sd);
         fore.push(day.glb_act_pwr_forecast);
         sub1.push(day.sub1_mean);
-        sub1SD.push(day.sub1_sd);
         sub2.push(day.sub2_mean);
-        sub2SD.push(day.sub2_sd);
         sub3.push(day.sub3_mean);
-        sub3SD.push(day.sub3_sd);
         volt.push(day.voltage_mean);
     }
+    return [dates, obs, fore, sub1, sub2, sub3, volt];
+}
 
-    var trace1 = {
-        x: dates,
-        y: obs,
+function getStartDate(data) {
+    
+}
+
+function getView(data, size, begin) {
+    var viewData = [[], [], [], [], [], [], []];
+    for (var i = 0; i < data.length; i++) {
+        for (var j = begin; j < begin + size; j++) {
+             viewData[i].push(data[i][j]);
+        }
+    }
+    drawGraphs(viewData);
+    //return viewData;
+}
+
+function drawGraphs(data){
+    var observed = {
+        x: data[0],
+        y: data[1],
         marker: {         // marker is an object, valid marker keys: #scatter-marker
                 color: 'rgb(16, 32, 77)' // more about "marker.color": #scatter-marker-color
             },
@@ -53,55 +69,72 @@ function drawGraphs(response, begin, end) {
         type: 'scatter'
       };
 
-    var trace2 = {
-        x: dates,
-        y: fore,
+    var forecast = {
+        x: data[0],
+        y: data[2],
         name: "Forecast",
         type: 'scatter'
       };
 
-    data = [trace1, trace2];
+    var voltage = {
+        x: data[0],
+        y: data[6],
+        xaxis: 'x2',
+        yaxis: 'y2',
+        name: "Voltage",
+        type: 'scatter'
+      };
 
-    layout = {                     // all "layout" attributes: #layout
-        title: 'simple example',  // more about "layout.title": #layout-title
-        xaxis: {                  // all "layout.xaxis" attributes: #layout-xaxis
-            title: 'time'         // more about "layout.xaxis.title": #layout-xaxis-title
+    var consumption = [observed, forecast, voltage];
+    
+    var topLayout = {
+        yaxis2: {domain: [0, .2]},
+        xaxis2: {anchor: 'y2'},
+        yaxis: {domain: [.3, 1]},
+        margin: {
+            t:0
         }
     };
 
     var sub1graph = {
-            x: dates,
-            y: sub1,
+            x: data[0],
+            y: data[3],
             name: "Sub-component 1",
             type: "bar"
         };
 
     var sub2graph = {
-            x: dates,
-            y: sub2,
+            x: data[0],
+            y: data[4],
+            xaxis: 'x2',
+            yaxis: 'y2',
             name: "Sub-component 2",
             type: "bar"
         };
 
     var sub3graph = {
-            x: dates,
-            y: sub3,
+            x: data[0],
+            y: data[5],
+            xaxis: 'x3',
+            yaxis: 'y3',
             name: "Sub-component 3",
             type: "bar"
         };
 
     var subs = [sub1graph, sub2graph, sub3graph];
 
-    var voltage = [{
-        x: dates,
-        y: volt,
-        name: "Voltage",
-        type: 'scatter'
-      }];
+    var subsLayout = {
+      xaxis: {domain: [0, .32]},
+      yaxis2: {anchor: 'x2'},
+      xaxis2: {domain: [0.35, .66]},
+      yaxis3: {anchor: 'x3'},
+      xaxis3: {domain: [0.69, 1]},
+        margin: {
+            t:0
+        }
+    };
 
-    Plotly.newPlot('plotly', data, layout);
-    Plotly.newPlot('subs', subs);
-    Plotly.newPlot('voltage', voltage);
-
-    return "cat";
+    Plotly.newPlot('consumption', consumption, topLayout);
+    Plotly.newPlot('subs', subs, subsLayout);
+    //Plotly.newPlot('voltage', voltage);
 }
