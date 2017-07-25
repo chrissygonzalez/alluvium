@@ -1,25 +1,46 @@
-var content = document.getElementById("content");
+var button = document.getElementById("myBtn");
 var requestURL = "data/power_consumption.json";
 var request = new XMLHttpRequest();
 request.open('GET', requestURL);
 request.responseType = 'json';
 request.send();
-request.onload = function() {
-    var data = request.response;
+request.addEventListener("load", transferComplete);
+
+function transferComplete(e){
+    drawGraphs(request.response, 10, 18);
+}
+var cat;
+button.addEventListener("click", function(e) {
+    cat = drawGraphs(request.response, 0, 8);
+    console.log(cat);
+});
+
+function drawGraphs(response, begin, end) {
+    var data = response;
     var dates = [];
     var obs = [];
+    var obsSD = [];
     var fore = [];
     var sub1 = [];
+    var sub1SD = [];
     var sub2 = [];
+    var sub2SD = [];
     var sub3 = [];
-    for (var i = 10; i < 18; i++) {
+    var sub3SD = [];
+    var volt = [];
+    for (var i = begin; i < end; i++) {
         var day = JSON.parse(data[i]);
         dates.push(day.Date);
         obs.push(day.glb_act_pwr_mean);
+        obsSD.push(day.glb_act_pwr_sd);
         fore.push(day.glb_act_pwr_forecast);
         sub1.push(day.sub1_mean);
+        sub1SD.push(day.sub1_sd);
         sub2.push(day.sub2_mean);
+        sub2SD.push(day.sub2_sd);
         sub3.push(day.sub3_mean);
+        sub3SD.push(day.sub3_sd);
+        volt.push(day.voltage_mean);
     }
 
     var trace1 = {
@@ -71,6 +92,16 @@ request.onload = function() {
 
     var subs = [sub1graph, sub2graph, sub3graph];
 
+    var voltage = [{
+        x: dates,
+        y: volt,
+        name: "Voltage",
+        type: 'scatter'
+      }];
+
     Plotly.newPlot('plotly', data, layout);
-    Plotly.newPlot('sub1', subs);
+    Plotly.newPlot('subs', subs);
+    Plotly.newPlot('voltage', voltage);
+
+    return "cat";
 }

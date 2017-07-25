@@ -10,7 +10,11 @@ body {
     padding: 20px;
 }
 
-#sub1 {
-    width: 33%;
+#subs {
+    width: 50%;
+}
+ 
+#voltage {
+    width: 50%;
 }
 
