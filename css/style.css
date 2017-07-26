@@ -1,10 +1,77 @@
 body {
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Overpass", "Helvetica",  sans-serif;
     font-size: 13px;
+    margin: 0;
+    padding: 0;
+    background-color: #252831;
 }
 
-.small-graphs {
-    width: 50%;
+button {
+    background-color: #000;
+    border: 2px solid #999;
+    margin: 5px;
+    margin-top: -10px;
+    font-size: 13px;
+    font-family: "Overpass", "Helvetica", sans-serif;
+    border-radius: 3px;
+    color: #999;
+}
+
+button:hover {
+    color: #fff;
+    border: 2px solid #fff;
+}
+
+h1 {
+    font-weight: normal;
+    line-height: 1.8;
+    color: #ccc;
+    display: inline;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.plots {
+    margin-top: 80px;
+}
+
+.buttons {
+    color: #fff;
+    padding-right: 30px;
+    margin-top: 15px;
+}
+
+.topbar {
+    position: fixed;
+    top: 0;
+    background-color: #000;
+    width: 100%;
+    height: 50px;
+    vertical-align: middle;
+    padding: 10px;
+}
+
+
+.text-center {
+    text-align: center;
+}
+
+.display-inline {
+    display: inline;
+}
+
+.display-inline-block {
     display: inline-block;
 }
 
+.mt-10 {
+    margin-top: 10px;
+}
+
+.float-right {
+    float: right;
+}
+
+.float-left {
+    float: left;
+}

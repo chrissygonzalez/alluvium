@@ -3,12 +3,30 @@
 <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="css/style.css" />
+    <link href="https://fonts.googleapis.com/css?family=Overpass" rel="stylesheet">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
-    <button id="myBtn">Click me</button>
-    <div id="consumption" style="height: 600px; width: 100%"></div>
-    <div id="subs" style="height: 200px; width: 100%;"></div>
+    <div class="topbar">
+        <div class="float-left">
+            <button id="back" class="float-left mt-10">&lsaquo;</button>
+            <h1 id="title" class="display-inline"></h1>
+            <button id="forward" class="float-right mt-10">&rsaquo;</button>
+        </div>
+        <div class="display-inline float-right buttons">
+            <p class="display-inline">Change view:</p>
+            <button id="btn7">7 days</button>
+            <button id="btn30">30 days</button>
+            <button id="btn60">60 days</button>
+            <button id="btn90">90 days</button>
+            <button id="btn120">120 days</button>
+        </div>
+    </div>
+
+    <div class="text-center plots">
+        <div id="consumption" style="height: 600px; width: 100%"></div>
+        <div id="subs" style="height: 200px; width: 100%;"></div>
+    </div>
     <script src="js/index.js"></script>
 </body>
 </html>
