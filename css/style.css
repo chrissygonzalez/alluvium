@@ -31,14 +31,34 @@ h1 {
     margin-right: 10px;
 }
 
-.plots {
-    margin-top: 80px;
-}
-
 .buttons {
     color: #fff;
     padding-right: 30px;
     margin-top: 15px;
+}
+
+.display-inline {
+    display: inline;
+}
+
+.display-inline-block {
+    display: inline-block;
+}
+
+.float-right {
+    float: right;
+}
+
+.float-left {
+    float: left;
+}
+
+.mt-10 {
+    margin-top: 10px;
+}
+
+.plots {
+    margin-top: 80px;
 }
 
 .topbar {
@@ -51,27 +71,7 @@ h1 {
     padding: 10px;
 }
 
-
 .text-center {
     text-align: center;
 }
 
-.display-inline {
-    display: inline;
-}
-
-.display-inline-block {
-    display: inline-block;
-}
-
-.mt-10 {
-    margin-top: 10px;
-}
-
-.float-right {
-    float: right;
-}
-
-.float-left {
-    float: left;
-}
